@@ -1,0 +1,22 @@
+info:
+  app:
+    name: Bank Transactions API
+    description: REST API for importing and aggregating bank transactions
+    version: 1.0.0
+
+spring:
+  mongodb:
+    uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/bank_transactions}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
