@@ -1,0 +1,28 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: bank-transactions-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build: .
+    container_name: bank-transactions-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/bank_transactions
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+volumes:
+  mongo_data:
