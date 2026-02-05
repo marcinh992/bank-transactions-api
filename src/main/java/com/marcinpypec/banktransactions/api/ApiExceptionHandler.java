@@ -6,6 +6,7 @@ import com.marcinpypec.banktransactions.importjob.exception.ImportNotFoundExcept
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
@@ -44,6 +45,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(ApiError.of("BAD_REQUEST", ex.getMessage()));
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ApiError> handleValidation(HandlerMethodValidationException ex) {
+        return ResponseEntity.badRequest().body(ApiError.of("VALIDATION_ERROR", "Invalid request parameters"));
     }
 
 }
